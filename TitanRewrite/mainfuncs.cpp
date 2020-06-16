@@ -78,6 +78,21 @@ void sleepcp(int milliseconds) // cross-platform sleep function
 #endif
 }
 
+#if __linux__
+// linux exec
+std::string exec(const char* cmd) {
+	std::array<char, 128> buffer;
+	std::string result;
+	std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
+	if (!pipe) {
+		throw std::runtime_error("popen() failed!");
+	}
+	while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
+		result += buffer.data();
+	}
+	return result;
+}
+#else
 std::string exec(const char* cmd) {
 	std::array<char, 128> buffer;
 	std::string result;
@@ -90,22 +105,7 @@ std::string exec(const char* cmd) {
 	}
 	return result;
 }
-
-// linux exec
-
-/*std::string exec(const char* cmd) {
-	std::array<char, 128> buffer;
-	std::string result;
-	std::unique_ptr<FILE, decltype(&pclose)> pipe(popen(cmd, "r"), pclose);
-	if (!pipe) {
-		throw std::runtime_error("popen() failed!");
-	}
-	while (fgets(buffer.data(), buffer.size(), pipe.get()) != nullptr) {
-		result += buffer.data();
-	}
-	return result;
-}*/
-
+#endif
 
 /* GLOBAL SNIPER FUNCTIONS */
 

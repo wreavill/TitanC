@@ -40,7 +40,11 @@ bool g_bIsProgramRunning = true;
 
 int main()
 {
-	SetConsoleTitle(TEXT("Titan"));
+#if __linux__
+    std::cout << "\033]0;" << "Titan" << "\007";;
+#else
+    SetConsoleTitle(TEXT("Titan"));
+#endif
 
 	// Parse JSON
 	std::ifstream file, idsFile;

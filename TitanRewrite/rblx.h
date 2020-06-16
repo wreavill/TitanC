@@ -2,7 +2,7 @@
 #include <vector>
 #include <map>
 #include <curl/curl.h>
-#include <rapidjson/document.h>
+#include "rapidjson/document.h"
 #include <libxml/HTMLparser.h>
 #include <libxml/tree.h>
 #include <libxml/xpath.h>
